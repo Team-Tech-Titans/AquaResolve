@@ -2915,6 +2915,11 @@ dotenv@~16.0.3:
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.0.3.tgz#115aec42bac5053db3c456db30cc243a5a836a07"
   integrity sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==
 
+eas@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/eas/-/eas-0.1.0.tgz#cc3c1d8f1aa9439a873670440cf946af1c5707b4"
+  integrity sha512-w88fTTTkfDLHwcaVW8wiYjOtnBBToguzc6AyIldD1vOrCRTKxhQEDS8oIE7nWeSJ+kCoIeoHd79Mhwvntydixg==
+
 ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
@@ -3085,7 +3090,7 @@ expo-file-system@~15.4.0, expo-file-system@~15.4.4:
   dependencies:
     uuid "^3.4.0"
 
-expo-font@~11.4.0:
+expo-font@^11.4.0, expo-font@~11.4.0:
   version "11.4.0"
   resolved "https://registry.yarnpkg.com/expo-font/-/expo-font-11.4.0.tgz#e2d31c0bb76ba3c37c2d84703a49aeafc3afef28"
   integrity sha512-nkmezCFD7gR/I6R+e3/ry18uEfF8uYrr6h+PdBJu+3dawoLOpo+wFb/RG9bHUekU1/cPanR58LR7G5MEMKHR2w==
