@@ -1,13 +1,13 @@
 import {setStatusBarHidden, StatusBar} from 'expo-status-bar';
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Image, Pressable, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import problem from '../assets/problem.png';
 import feed from '../assets/feed.png';
 import history from '../assets/history.png';
 import account from '../assets/account.png';
 
-export default function HomePage() {
+export default function HomePage({navigation}) {
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             {/*<StatusBar />*/}
             <View style={styles.bottomContainer}>
                 <Pressable style={styles.optionContainer}>
@@ -22,7 +22,7 @@ export default function HomePage() {
                     </View>
                     <Text style={styles.optionText}>History</Text>
                 </Pressable>
-                <Pressable style={styles.optionContainer}>
+                <Pressable style={styles.optionContainer} onPress={()=> navigation.navigate("Login")}>
                     <View style={styles.optionImageContainer}>
                         <Image source={account} />
                     </View>
@@ -35,7 +35,7 @@ export default function HomePage() {
                 {/*    <Text>Feed</Text>*/}
                 {/*</View>*/}
             </View>
-        </View>
+        </SafeAreaView>
     );
 }
 

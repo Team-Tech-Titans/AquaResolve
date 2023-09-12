@@ -1,10 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import icon from '../assets/logoSmall.png';
 import { useFonts } from 'expo-font';
 import poppinsRegular from '../assets/fonts/Poppins-Regular.ttf';
+import {useSafeAreaInsets} from "react-native-safe-area-context";
+import settingsIcon from '../assets/settings.png';
 
 export default function HomePage() {
+    const insets = useSafeAreaInsets();
     const [fontsLoaded] = useFonts({
         'Poppins-Regular': poppinsRegular,
     });
@@ -13,16 +16,29 @@ export default function HomePage() {
         return null;
     }
 
+    const dynamicStyles = {
+        topBarContainer: {
+            paddingTop: insets.top + 2,
+            height: insets.top + 68,
+        },
+        settingsIcon: {
+            position: "absolute",
+            top: insets.top + 20,
+        },
+    }
+
+
     return (
-        <View style={styles.container}>
-            {/*<StatusBar/>*/}
-            <View style={styles.topBarContainer}>
+        <SafeAreaView style={styles.container}>
+            <StatusBar hidden={false} />
+            <View style={[styles.topBarContainer, dynamicStyles.topBarContainer]}>
                 <View style={styles.logoContainer}>
                     <Image source={icon} />
                 </View>
                 <Text style={styles.topbarTitle}>AquaResolve</Text>
+                <Image style={[styles.settingsIcon, dynamicStyles.settingsIcon]} source={settingsIcon} />
             </View>
-        </View>
+        </SafeAreaView>
     );
 }
 
@@ -30,8 +46,14 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
     },
+    settingsIcon: {
+        height: 24,
+        width: 24,
+        position: "absolute",
+        top: 62,
+        right: 26,
+    },
     topBarContainer: {
-        height: 60,
         width: '100%',
         backgroundColor: '#A9D6E5',
         position: 'absolute',
@@ -39,7 +61,7 @@ const styles = StyleSheet.create({
         zIndex: 10,
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'center',
+        paddingLeft: 26,
         alignItems: 'center',
     },
     topbarTitle: {
@@ -48,9 +70,9 @@ const styles = StyleSheet.create({
     },
     logoContainer: {
         backgroundColor: '#fff',
-        padding: 6,
-        height: 44,
-        width: 44,
+        padding: 4,
+        height: 40,
+        width: 40,
         borderRadius: 50,
         marginRight: 10,
     },

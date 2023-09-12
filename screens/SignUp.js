@@ -1,0 +1,117 @@
+import React,{ useState} from 'react';
+import {
+    SafeAreaView,
+    StyleSheet,
+    Text,
+    View,
+    TextInput,
+    TouchableOpacity,
+} from 'react-native';
+const SignupScreen =({navigation})=>{
+    const[firstName,setFirstname] = useState("");
+    const[lastName,setlastname] = useState("");
+    const[phoneNo,setPhoneNo] = useState("");
+    const[password,setPassword] = useState("");
+    const[confirmPassword,setConfirmpass] = useState("");
+    return(
+        <SafeAreaView style={styles.container}>
+            <Text
+                style={{fontSize:40,textAlign:'center',margin:15,fontWeight:'bold'}}
+            > Create Account
+            </Text>
+            <TextInput
+                style={styles.input}
+                placeholder='First Name'
+                value={firstName}
+                onChangeText={(text)=>setFirstname(text)}>
+            </TextInput>
+
+            <TextInput
+                style={styles.input}
+                placeholder='Last Name'
+                value={lastName}
+                onChangeText={(text)=>setlastname(text)}>
+            </TextInput>
+
+            <TextInput
+                style={styles.input}
+                placeholder='Phone No.'
+                inputMode='tel'
+                value={phoneNo}
+                maxLength= {10}
+                onChangeText={(text)=>setPhoneNo(text)}>
+            </TextInput>
+
+            <TextInput
+                style={styles.input}
+                placeholder='Password'
+                secureTextEntry={true}
+                value={password}
+                onChangeText={(text)=>setPassword(text)}
+            >
+            </TextInput>
+
+            <TextInput
+                style={styles.input}
+                placeholder='Confirm Password'
+                secureTextEntry={true}
+                value={confirmPassword}
+                onChangeText={(text)=>setConfirmpass(text)}>
+            </TextInput>
+
+            <View style={styles.btnContainer}>
+                <TouchableOpacity
+                    style={styles.userBtn}
+                    onPress={()=>navigation.navigate('Login')}>
+                    <Text style={styles.btnText}>Log in</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.userBtn}
+                    onPress={()=>navigation.navigate('Home')}>
+                    <Text style={styles.btnText}>Sign Up</Text>
+                </TouchableOpacity>
+            </View>
+        </SafeAreaView>
+    )
+}
+
+const styles = StyleSheet.create({
+    container:{
+        flex:1,
+        justifyContent:'center',
+        alignItems:'center',
+        backgroundColor:'powderblue',
+    },
+    heading:{
+        fontSize:30,
+        textAlign:'center',
+        margin:10
+    },
+    input:{
+        width:'90%',
+        backgroundColor:'white',
+        padding: 15,
+        marginBottom:10,
+        borderRadius:10
+
+    },
+    btnContainer:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        width:'90%',
+        alignItems:'center',
+        marginTop:15,
+    },
+    userBtn:{
+        backgroundColor:'cadetblue',
+        padding:15,
+        width:'45%',
+        marginBottom:10,
+        borderRadius:5
+    },
+    btnText:{
+        fontSize:16,
+        textAlign:'center',
+    }
+})
+export default SignupScreen;

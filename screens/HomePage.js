@@ -1,15 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
-import {Pressable, StyleSheet, Text, TextInput, View, Image, Button} from 'react-native';
+import {Pressable, StyleSheet, Text, TextInput, View, Image, Button, SafeAreaView} from 'react-native';
 import TopBar from '../components/TopBar.js';
 import BottomBar from '../components/BottomBar.js';
 import newIcon from '../assets/new.png';
 
 export default function HomePage() {
     return (
-        <View style={styles.mainContainer}>
+        <SafeAreaView style={styles.mainContainer}>
         <TopBar />
             <View style={styles.container}>
-                <Text style={styles.greeting} >Hi Samarth!</Text>
+                <Text style={styles.greeting}>Hi Samarth!</Text>
                 <Text style={styles.problemContainerTitle}>Enter your problem details</Text>
                 <View style={styles.problemContainer}>
                     <TextInput
@@ -26,7 +26,7 @@ export default function HomePage() {
                 </View>
             </View>
         <BottomBar />
-        </View>
+        </SafeAreaView>
     );
 }
 
@@ -39,8 +39,9 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: '#fff',
         position: 'absolute',
-        top: 60,
+        top: 105,
         margin: 15,
+        marginTop: 24,
         width: '100%',
         height: '100%',
     },
