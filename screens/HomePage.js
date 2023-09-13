@@ -4,6 +4,7 @@ import TopBar from '../components/TopBar.js';
 import BottomBar from '../components/BottomBar.js';
 import newIcon from '../assets/new.png';
 
+
 export default function HomePage() {
     return (
         <SafeAreaView style={styles.mainContainer}>
