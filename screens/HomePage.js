@@ -4,6 +4,7 @@ import TopBar from '../components/TopBar.js';
 import BottomBar from '../components/BottomBar.js';
 import newIcon from '../assets/new.png';
 
+// A change
 
 export default function HomePage() {
     return (
