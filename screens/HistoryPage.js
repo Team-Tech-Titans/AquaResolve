@@ -4,16 +4,16 @@ import BottomBar from '../components/BottomBar.js';
 import newIcon from '../assets/new.png';
 import {useNavigation} from "@react-navigation/native";
 
-export default function HistoryPage() {
+function HistoryPage() {
     const navigation = useNavigation();
     return (
         <SafeAreaView style={styles.mainContainer}>
-        {/* <TopBar /> */}
+        <TopBar />
             <View style={styles.container}>
                 <Text style={styles.greeting}>History</Text>
                 <Text style={styles.problemContainerTitle}>All of your past submissions here</Text>
             </View>
-        {/* <BottomBar navigation={navigation} /> */}
+        <BottomBar navigation={navigation} />
         </SafeAreaView>
     );
 }
@@ -96,3 +96,5 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-Regular',
     }
 });
+
+export default HistoryPage;

@@ -3,13 +3,12 @@ import TopBar from '../components/TopBar.js';
 import BottomBar from '../components/BottomBar.js';
 import newIcon from '../assets/new.png';
 import {useNavigation} from "@react-navigation/native";
-import Layout from './Layout.js';
 
 function HomePage() {
     const navigation = useNavigation();
     return (
         <SafeAreaView style={styles.mainContainer}>
-        {/* <TopBar /> */}
+        <TopBar />
             <View style={styles.container}>
                 <Text style={styles.greeting}>Hi Samarth!</Text>
                 <Text style={styles.problemContainerTitle}>Enter your problem details</Text>
@@ -27,7 +26,7 @@ function HomePage() {
                     </Pressable>
                 </View>
             </View>
-        {/* <BottomBar navigation={navigation} /> */}
+        <BottomBar navigation={navigation} />
         </SafeAreaView>
     );
 }
@@ -111,4 +110,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Layout(HomePage);
+export default HomePage;
