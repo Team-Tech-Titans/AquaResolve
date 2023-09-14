@@ -2,7 +2,6 @@ import { StyleSheet, Text, View } from 'react-native';
 import HomePage from './screens/HomePage';
 import History from './screens/HistoryPage';
 import SignUp from "./screens/SignUp";
-import MainContainer from './screens/MainContainer';
 import Login from "./screens/Login";
 import {useFonts} from "expo-font";
 import poppinsRegular from "./assets/fonts/Poppins-Regular.ttf";
