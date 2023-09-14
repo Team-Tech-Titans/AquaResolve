@@ -5,14 +5,8 @@ import newIcon from '../assets/new.png';
 import {useNavigation} from "@react-navigation/native";
 import Layout from './Layout.js';
 
-<<<<<<< HEAD
 function HomePage() {
     const navigation = useNavigation();
-=======
-// A change
-
-export default function HomePage() {
->>>>>>> 4f5022c9918ba3d77636929b295f6c51fbd10893
     return (
         <SafeAreaView style={styles.mainContainer}>
         {/* <TopBar /> */}
