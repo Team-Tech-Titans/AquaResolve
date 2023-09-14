@@ -7,13 +7,15 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import TopBar from '../components/TopBar.js';
+import BottomBar from '../components/BottomBar.js';
 
 
 export default function Login({navigation}){
     return(
         <SafeAreaView style={styles.container}>
             <Text
-                style={{fontSize:40,textAlign:'center',margin:15,fontWeight:'bold'}}
+                style={styles.heading}
             > Log In
             </Text>
             <TextInput
@@ -51,37 +53,40 @@ const styles = StyleSheet.create({
         flex:1,
         justifyContent:'center',
         alignItems:'center',
-        backgroundColor:'powderblue',
+        backgroundColor:'#A9D6E5',
     },
     heading:{
         fontSize:30,
         textAlign:'center',
-        margin:10
+        margin:10,
+        fontFamily: 'Poppins-Regular',
     },
     input:{
         width:'90%',
         backgroundColor:'white',
         padding: 15,
         marginBottom:10,
-        borderRadius:10
-
+        borderRadius:10,
+        fontFamily: 'Poppins-Regular',
     },
     btnContainer:{
         flexDirection:'row',
         justifyContent:'space-between',
         width:'90%',
         alignItems:'center',
-        marginTop:15
+        marginTop:15,
     },
     userBtn:{
-        backgroundColor:'cadetblue',
+        backgroundColor:'#2C7DA0',
         padding:15,
         width:'45%',
         marginBottom:10,
-        borderRadius:5
+        borderRadius:5,
     },
     btnText:{
         fontSize:16,
         textAlign:'center',
+        color: '#fff',
+        fontFamily: 'Poppins-Regular',
     }
 })

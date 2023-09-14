@@ -95,24 +95,22 @@ function HistoryPage() {
 
 const styles = StyleSheet.create({
     mainContainer: {
-        width: '100%',
-        height: '100%',
+        flex: 1,
+        paddingTop: 88,
         backgroundColor: '#fff',
     },
     container: {
         backgroundColor: '#fff',
-        position: 'absolute',
-        top: 105,
         margin: 15,
         marginTop: 24,
         width: '100%',
         height: '100%',
-        paddingBottom: 600,
     },
     greeting: {
         fontSize: 22,
         fontFamily: 'Poppins-Regular',
         paddingLeft: 30,
+        paddingTop: 20,
     },
     problemContainer: {
         width: '92%',
@@ -121,7 +119,6 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         flex: 1,
         alignItems: 'center',
-        marginTop: 20,
     },
     problemContainerTitle: {
         color: '#888',
@@ -175,6 +172,7 @@ const styles = StyleSheet.create({
         flex: 1,
         marginLeft: -30,
         alignItems: 'center',
+        paddingBottom: 60,
     },
     historyContainer: {
         flex: 1,
@@ -185,7 +183,7 @@ const styles = StyleSheet.create({
         width: 340,
         backgroundColor: '#ddd',
         borderRadius: 12,
-        marginBottom: 20,
+        marginBottom: 15,
         overflow: 'hidden',
         flex: 1,
         alignItems: 'center',

@@ -45,6 +45,8 @@ export default function HomePage() {
 const styles = StyleSheet.create({
     container: {
         width: '100%',
+        position: 'absolute',
+        top: 0,
     },
     settingsIcon: {
         height: 24,
@@ -56,8 +58,6 @@ const styles = StyleSheet.create({
     topBarContainer: {
         width: '100%',
         backgroundColor: '#A9D6E5',
-        position: 'absolute',
-        top: 0,
         zIndex: 10,
         flex: 1,
         flexDirection: 'row',
