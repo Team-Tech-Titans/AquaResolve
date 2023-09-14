@@ -1,46 +1,42 @@
 import {setStatusBarHidden, StatusBar} from 'expo-status-bar';
-import {Image, Pressable, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {Animated, Easing,Image, Pressable, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import problem from '../assets/problem.png';
 import feed from '../assets/feed.png';
 import history from '../assets/history.png';
 import account from '../assets/account.png';
 import { useRoute } from '@react-navigation/native';
+import { useEffect, useState } from 'react';
 
-export default function HomePage({navigation}) {
+export default function BottomBar({navigation}) {
+    const fadeAnim = new Animated.Value(0);
     const route = useRoute();
-
-    const changeActiveNav = () => {
-        console.log(route.name)
-    }
+    const [activeOption, setActiveOption] = useState('Home'); 
+    useEffect(() => {
+        console.log(route.name);
+        setActiveOption(route.name);
+    }, [route.name])
 
     return (
         <SafeAreaView style={styles.container}>
-            {/*<StatusBar />*/}
             <View style={styles.bottomContainer}>
                 <Pressable style={styles.optionContainer} onPress={() => navigation.navigate("Home")}>
-                    <View style={styles.activeOptionImageContainer}>
+                    <View style={[styles.optionImageContainer, activeOption === "Home" && styles.activeOptionImageContainer]}>
                         <Image source={problem} />
                     </View>
                     <Text style={styles.optionText}>New Problem</Text>
                 </Pressable>
                 <Pressable style={styles.optionContainer} onPress={() => navigation.navigate("History")}>
-                    <View style={styles.optionImageContainer}>
+                    <View style={[styles.optionImageContainer, activeOption === "History" && styles.activeOptionImageContainer]}>
                         <Image source={history} />
                     </View>
                     <Text style={styles.optionText}>History</Text>
                 </Pressable>
-                <Pressable style={styles.optionContainer} onPress={() => navigation.navigate("Login")}>
-                    <View style={styles.optionImageContainer}>
+                <Pressable style={styles.optionContainer} onPress={() => navigation.navigate("Account")}>
+                    <View style={[styles.optionImageContainer, activeOption === "Account" && styles.activeOptionImageContainer]}>
                         <Image source={account} />
                     </View>
                     <Text style={styles.optionText}>Account</Text>
                 </Pressable>
-                {/*<View>*/}
-                {/*    <View>*/}
-                {/*        <Image source={feed} />*/}
-                {/*    </View>*/}
-                {/*    <Text>Feed</Text>*/}
-                {/*</View>*/}
             </View>
         </SafeAreaView>
     );
@@ -83,6 +79,7 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         borderRadius: 20,
         backgroundColor: '#ecf8f7',
+        opacity: 1,
     },
     optionText: {
         marginTop: 3,

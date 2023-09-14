@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import HomePage from './screens/HomePage';
 import History from './screens/HistoryPage';
+import Account from './screens/AccountPage';
 import SignUp from "./screens/SignUp";
 import Login from "./screens/Login";
 import {useFonts} from "expo-font";
@@ -25,12 +26,17 @@ export default function App() {
               <Stack.Screen
                   name="Home"
                   component={HomePage}
-                  options={{headerShown: false}}
+                  options={{ headerShown: false }}
               />
               <Stack.Screen
                   name="History"
                   component={History}
-                  options={{headerShown: false}}
+                  options={{ headerShown: false, animationEnabled: false }}
+              />
+              <Stack.Screen
+                  name="Account"
+                  component={Account}
+                  options={{ headerShown: false, animationEnabled: false }}
               />
             <Stack.Screen
                 name="Login"
