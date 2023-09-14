@@ -41,7 +41,6 @@ export default function Login({navigation}){
                 >
                     <Text style={styles.btnText}>Log in</Text>
                 </TouchableOpacity>
-
             </View>
         </SafeAreaView>
     )

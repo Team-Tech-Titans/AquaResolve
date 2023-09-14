@@ -3,35 +3,15 @@ import TopBar from '../components/TopBar.js';
 import BottomBar from '../components/BottomBar.js';
 import newIcon from '../assets/new.png';
 import {useNavigation} from "@react-navigation/native";
-import Layout from './Layout.js';
 
-<<<<<<< HEAD
-function HomePage() {
+export default function HistoryPage() {
     const navigation = useNavigation();
-=======
-// A change
-
-export default function HomePage() {
->>>>>>> 4f5022c9918ba3d77636929b295f6c51fbd10893
     return (
         <SafeAreaView style={styles.mainContainer}>
         {/* <TopBar /> */}
             <View style={styles.container}>
-                <Text style={styles.greeting}>Hi Samarth!</Text>
-                <Text style={styles.problemContainerTitle}>Enter your problem details</Text>
-                <View style={styles.problemContainer}>
-                    <TextInput
-                        multiline={true}
-                        placeholder="Describe your problem here"
-                        style={styles.textInput}/>
-                    <Pressable style={styles.cameraButton}>
-                        <Image style={styles.cameraImage} source={newIcon}/>
-                        <Text style={styles.cameraText}>Add a new image for your problem</Text>
-                    </Pressable>
-                    <Pressable style={styles.buttonStyle}>
-                        <Text style={styles.buttonText}>Submit</Text>
-                    </Pressable>
-                </View>
+                <Text style={styles.greeting}>History</Text>
+                <Text style={styles.problemContainerTitle}>All of your past submissions here</Text>
             </View>
         {/* <BottomBar navigation={navigation} /> */}
         </SafeAreaView>
@@ -116,5 +96,3 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-Regular',
     }
 });
-
-export default Layout(HomePage);

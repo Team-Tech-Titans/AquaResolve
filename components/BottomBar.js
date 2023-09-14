@@ -4,25 +4,32 @@ import problem from '../assets/problem.png';
 import feed from '../assets/feed.png';
 import history from '../assets/history.png';
 import account from '../assets/account.png';
+import { useRoute } from '@react-navigation/native';
 
 export default function HomePage({navigation}) {
+    const route = useRoute();
+
+    const changeActiveNav = () => {
+        console.log(route.name)
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             {/*<StatusBar />*/}
             <View style={styles.bottomContainer}>
-                <Pressable style={styles.optionContainer}>
+                <Pressable style={styles.optionContainer} onPress={() => navigation.navigate("Home")}>
                     <View style={styles.activeOptionImageContainer}>
                         <Image source={problem} />
                     </View>
-                    <Text style={styles.activeOptionText}>New Problem</Text>
+                    <Text style={styles.optionText}>New Problem</Text>
                 </Pressable>
-                <Pressable style={styles.optionContainer}>
+                <Pressable style={styles.optionContainer} onPress={() => navigation.navigate("History")}>
                     <View style={styles.optionImageContainer}>
                         <Image source={history} />
                     </View>
                     <Text style={styles.optionText}>History</Text>
                 </Pressable>
-                <Pressable style={styles.optionContainer} onPress={()=> navigation.navigate("Login")}>
+                <Pressable style={styles.optionContainer} onPress={() => navigation.navigate("Login")}>
                     <View style={styles.optionImageContainer}>
                         <Image source={account} />
                     </View>
@@ -76,11 +83,6 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         borderRadius: 20,
         backgroundColor: '#ecf8f7',
-    },
-    activeOptionText: {
-        marginTop: 3,
-        fontSize: 12,
-        fontFamily: 'Poppins-Regular',
     },
     optionText: {
         marginTop: 3,
