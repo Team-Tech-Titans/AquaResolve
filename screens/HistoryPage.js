@@ -3,16 +3,91 @@ import TopBar from '../components/TopBar.js';
 import BottomBar from '../components/BottomBar.js';
 import newIcon from '../assets/new.png';
 import {useNavigation} from "@react-navigation/native";
+import { ScrollView } from 'react-native-gesture-handler';
 
 function HistoryPage() {
     const navigation = useNavigation();
     return (
         <SafeAreaView style={styles.mainContainer}>
         <TopBar />
-            <View style={styles.container}>
+            <ScrollView style={styles.container}>
                 <Text style={styles.greeting}>History</Text>
                 <Text style={styles.problemContainerTitle}>All of your past submissions here</Text>
-            </View>
+                <View style={styles.historyCardsContainer}>
+                    <View style={styles.historyContainer}>
+                        <View style={styles.historyCard}>
+                            <View style={styles.historyCardImageContainer}></View>
+                            <View style={styles.historyCardInfo}>
+                                <View style={styles.historyCardTitle}></View>
+                                <View style={styles.historyCardLocation}></View>
+                            </View>
+                        </View>
+                        <View style={styles.historyCard}>
+                            <View style={styles.historyCardImageContainer}></View>
+                            <View style={styles.historyCardInfo}>
+                                <View style={styles.historyCardTitle}></View>
+                                <View style={styles.historyCardLocation}></View>
+                            </View>
+                        </View>
+                        <View style={styles.historyCard}>
+                            <View style={styles.historyCardImageContainer}></View>
+                            <View style={styles.historyCardInfo}>
+                                <View style={styles.historyCardTitle}></View>
+                                <View style={styles.historyCardLocation}></View>
+                            </View>
+                        </View>
+                        <View style={styles.historyCard}>
+                            <View style={styles.historyCardImageContainer}></View>
+                            <View style={styles.historyCardInfo}>
+                                <View style={styles.historyCardTitle}></View>
+                                <View style={styles.historyCardLocation}></View>
+                            </View>
+                        </View>
+                        <View style={styles.historyCard}>
+                            <View style={styles.historyCardImageContainer}></View>
+                            <View style={styles.historyCardInfo}>
+                                <View style={styles.historyCardTitle}></View>
+                                <View style={styles.historyCardLocation}></View>
+                            </View>
+                        </View>
+                        <View style={styles.historyCard}>
+                            <View style={styles.historyCardImageContainer}></View>
+                            <View style={styles.historyCardInfo}>
+                                <View style={styles.historyCardTitle}></View>
+                                <View style={styles.historyCardLocation}></View>
+                            </View>
+                        </View>
+                        <View style={styles.historyCard}>
+                            <View style={styles.historyCardImageContainer}></View>
+                            <View style={styles.historyCardInfo}>
+                                <View style={styles.historyCardTitle}></View>
+                                <View style={styles.historyCardLocation}></View>
+                            </View>
+                        </View>
+                        <View style={styles.historyCard}>
+                            <View style={styles.historyCardImageContainer}></View>
+                            <View style={styles.historyCardInfo}>
+                                <View style={styles.historyCardTitle}></View>
+                                <View style={styles.historyCardLocation}></View>
+                            </View>
+                        </View>
+                        <View style={styles.historyCard}>
+                            <View style={styles.historyCardImageContainer}></View>
+                            <View style={styles.historyCardInfo}>
+                                <View style={styles.historyCardTitle}></View>
+                                <View style={styles.historyCardLocation}></View>
+                            </View>
+                        </View>
+                        <View style={styles.historyCard}>
+                            <View style={styles.historyCardImageContainer}></View>
+                            <View style={styles.historyCardInfo}>
+                                <View style={styles.historyCardTitle}></View>
+                                <View style={styles.historyCardLocation}></View>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            </ScrollView>
         <BottomBar navigation={navigation} />
         </SafeAreaView>
     );
@@ -32,6 +107,7 @@ const styles = StyleSheet.create({
         marginTop: 24,
         width: '100%',
         height: '100%',
+        paddingBottom: 600,
     },
     greeting: {
         fontSize: 22,
@@ -45,7 +121,7 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         flex: 1,
         alignItems: 'center',
-        paddingTop: 20,
+        marginTop: 20,
     },
     problemContainerTitle: {
         color: '#888',
@@ -94,7 +170,48 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#fff',
         fontFamily: 'Poppins-Regular',
-    }
+    },
+    historyCardsContainer: {
+        flex: 1,
+        marginLeft: -30,
+        alignItems: 'center',
+    },
+    historyContainer: {
+        flex: 1,
+        marginTop: 20,
+    },
+    historyCard: {
+        height: 100,
+        width: 340,
+        backgroundColor: '#ddd',
+        borderRadius: 12,
+        marginBottom: 20,
+        overflow: 'hidden',
+        flex: 1,
+        alignItems: 'center',
+        flexDirection: 'row',
+    },
+    historyCardImageContainer: {
+        height: 100,
+        width: 100,
+        backgroundColor: '#bbb',
+    },
+    historyCardInfo: {
+        marginLeft: 10,
+    },
+    historyCardTitle: {
+        height: 12,
+        width: 200,
+        backgroundColor: '#bbb',
+        marginBottom: 10,
+        borderRadius: 20,
+    },
+    historyCardLocation: {
+        height: 12,
+        width: 120,
+        backgroundColor: '#bbb',
+        borderRadius: 20,
+    },
 });
 
 export default HistoryPage;
