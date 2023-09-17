@@ -33,7 +33,7 @@ export default function HomePage() {
             <StatusBar hidden={false} />
             <View style={[styles.topBarContainer, dynamicStyles.topBarContainer]}>
                 <View style={styles.logoContainer}>
-                    <Image source={icon} />
+                    <Image style={styles.logo} source={icon} />
                 </View>
                 <Text style={styles.topbarTitle}>AquaResolve</Text>
                 <Image style={[styles.settingsIcon, dynamicStyles.settingsIcon]} source={settingsIcon} />
@@ -67,12 +67,17 @@ const styles = StyleSheet.create({
     topbarTitle: {
         fontSize: 18,
         fontFamily: 'Poppins-Regular',
+        marginTop: 2,
+    },
+    logo: {
+        height: 28,
+        width: 28,
     },
     logoContainer: {
         backgroundColor: '#fff',
-        padding: 4,
-        height: 40,
-        width: 40,
+        padding: 7,
+        height: 42,
+        width: 42,
         borderRadius: 50,
         marginRight: 10,
     },
