@@ -4,12 +4,190 @@ import BottomBar from '../components/BottomBar.js';
 import newIcon from '../assets/new.png';
 import location from '../assets/location.png';
 import {useNavigation} from "@react-navigation/native";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import * as Location from 'expo-location';
+import { collection, addDoc, db, storage, ref, uploadBytes, auth, signOut, onAuthStateChanged } from '../firebase';
+import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
+
+
 
 function HomePage() {
     const navigation = useNavigation();
+    const [locationCoordinates, setLocationCoordinates] = useState([]);
+    const [locationDetails, setLocationDetails] = useState('');
     const [keyboardOffset, setKeyboardOffset] = useState(0);
     const [isLocationInputFocused, setLocationInputFocused] = useState(false);
+    const [displayName, setDisplayName] = useState('Test');
+    const [email, setEmail] = useState('example@email.com');
+    const [phoneNumber, setPhoneNumber] = useState('9876543210');
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [imageUrl, setImageUrl] = useState('');
+    const [description, setDescription] = useState('');
+    
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => {
+          if (user !== null) {
+            setDisplayName(user.displayName);
+            setEmail(user.email);
+            // setPhoneNumber(user.phoneNumber);
+          }
+        });
+      }, []);
+
+
+      const handleImageClick = () => {
+        alert("Image can't be uploaded for now, feature on the way!")
+      }
+
+
+    //   const pickImage = async () => {
+    //     try {
+    //       const result = await ImagePicker.launchImageLibraryAsync({
+    //         mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    //         allowsEditing: true,
+    //         quality: 1,
+    //         base64: true,
+    //       });
+      
+    //       if (!result.canceled && result.assets.length > 0) {
+    //         const base64Data = await convertToBase64(result.assets[0].uri);
+    //         return base64Data;
+    //       } else {
+    //         console.warn('No image selected or image selection canceled');
+    //         return null;
+    //       }
+    //     } catch (error) {
+    //       console.error('Error picking an image:', error);
+    //       return null;
+    //     }
+    //   };
+      
+    //   const convertToBase64 = async (imageUri) => {
+    //     try {
+    //       if (!imageUri) {
+    //         console.error('Invalid image URI');
+    //         throw new Error('Invalid image URI');
+    //       }
+      
+    //       const base64Data = await FileSystem.readAsStringAsync(imageUri, {
+    //         encoding: FileSystem.EncodingType.Base64,
+    //       });
+    //       return base64Data;
+    //     } catch (error) {
+    //       console.error('Error converting to base64:', error);
+    //       throw error;
+    //     }
+    //   };
+      
+    //   const handleImageClick = async () => {
+    //     try {
+    //       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    //       console.log('Media library permission status:', status);
+      
+    //       if (status !== 'granted') {
+    //         alert('Permission to access media library denied');
+    //       } else {
+    //         const imageBase64Data = await pickImage();
+      
+    //         if (imageBase64Data) {
+    //           await uploadImage(imageBase64Data);
+    //         } else {
+    //           console.error('Image upload failed');
+    //           alert('Image upload failed. Please try again.');
+    //         }
+    //       }
+    //     } catch (error) {
+    //       console.error('Error handling image:', error);
+    //       alert('An error occurred while handling the image. Please try again.');
+    //     }
+    //   };
+      
+    //   const uploadImage = async (imageBase64Data) => {
+    //     const base64Image = imageBase64Data;
+    //     console.log('Firebase storage object:', storage);
+    //     const storageRef = ref(storage, 'some-child.jpg');
+      
+    //     try {
+    //       const uri = `data:image/jpeg;base64,${base64Image}`;
+    //       const fileUri = FileSystem.cacheDirectory + 'image.jpg';
+    
+    //       await FileSystem.writeAsStringAsync(fileUri, base64Image, {
+    //         encoding: FileSystem.EncodingType.Base64,
+    //       });
+      
+    //       const blob = await FileSystem.getInfoAsync(fileUri);
+      
+    //       await uploadBytes(storageRef, blob.uri);
+      
+    //       alert('Uploaded a blob or file!');
+    //     } catch (error) {
+    //       console.error('Error uploading image:', error);
+    //     }
+    //   };
+
+    const submitData = async () => {
+        console.log("hi");
+        try {
+            const docRef = await addDoc(collection(db, "data"), {
+              userName: displayName,
+              email: email,
+              phoneNumber: phoneNumber,
+              location: locationDetails,
+              problemDescription: description,
+              coordinates: locationCoordinates,
+            });
+            alert("Problem submitted succesfully")
+          } catch (e) {
+            console.error(e);
+            alert("Error submitting problem");
+          }
+    }
+      
+
+
+    const getUserLocation = async () => {
+        try {
+          const location = await Location.getCurrentPositionAsync({});
+          setLocationCoordinates([location.coords.latitude, location.coords.longitude]);
+        } catch (error) {
+            setLocationCoordinates('Error getting location, tap to try again');
+        }
+      };
+
+    const getLocation = async () => {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+      
+        if (status !== 'granted') {
+          alert('Location permission denied');
+          return;
+        }
+      
+        getUserLocation();
+      };
+      
+      const getLocationDetails = async (latitude, longitude) => {
+        setLocationDetails('Getting your location...');
+        await getLocation();
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`
+          );
+      
+          if (response.ok) {
+            const locationData = await response.json();
+            console.log(locationData);
+            const displayName = locationData.display_name;
+            console.log(displayName)
+            setLocationDetails(displayName);
+          } else {
+            setLocationDetails('Error fetching location, tap to try again.');
+          }
+        } catch (error) {
+          console.error('Error fetching location details:', error);
+          setLocationDetails('Error fetching location, tap to try again.');
+        }
+      };
   
     const handleLocationInputFocus = () => {
       setKeyboardOffset(-120);
@@ -23,26 +201,32 @@ function HomePage() {
         style={styles.mainContainer}>
             <TopBar />
             <ScrollView style={styles.container}>
-            <Text style={styles.greeting}>Hi Samarth!</Text>
+            <Text style={styles.greeting}>Hi {displayName}!</Text>
             <Text style={styles.problemContainerTitle}>Enter your problem details</Text>
             <View style={styles.problemContainer}>
                 <TextInput
                 multiline={true}
                 placeholder="Describe your problem here"
+                onChangeText={(text) => setDescription(text)}
                 style={styles.textInput}
                 onFocus={handleTextInputFocus} />
-                <TextInput
-                multiline={true}
-                placeholder="Choose your location"
-                style={styles.locationContainer}
-                onFocus={handleLocationInputFocus}
-                />
-                <Pressable style={styles.cameraButton}>
-                <Image style={styles.cameraImage} source={newIcon} />
-                <Text style={styles.cameraText}>Add a new image for your problem</Text>
+                <Pressable
+                    style={styles.locationContainer} onPress={() => getLocationDetails(locationCoordinates[0], locationCoordinates[1])}>
+                    <TextInput
+                    multiline={true}
+                    placeholder="Tap to get your location"
+                    style={styles.location}
+                    onFocus={handleLocationInputFocus}
+                    value={locationDetails}
+                    editable={false}
+                    />
                 </Pressable>
-                <Pressable style={styles.buttonStyle}>
-                <Text style={styles.buttonText}>Submit</Text>
+                <Pressable onPress={handleImageClick} style={styles.cameraButton}>
+                    <Image style={styles.cameraImage} source={newIcon} />
+                    <Text style={styles.cameraText}>Add a new image for your problem</Text>
+                </Pressable>
+                <Pressable onPress={submitData} style={styles.buttonStyle}>
+                    <Text style={styles.buttonText}>Submit</Text>
                 </Pressable>
             </View>
             </ScrollView>
@@ -96,14 +280,17 @@ const styles = StyleSheet.create({
         borderBottomColor: '#ccc',
     },
     locationContainer: {
-        height: 50,
+        padding: 10,
         paddingLeft: 16,
         paddingRight: 16,
         backgroundColor: '#e7e6e6',
         width: '90%',
-        fontFamily: 'Poppins-Regular',
         borderBottomLeftRadius: 14,
         borderBottomRightRadius: 14,
+    },
+    location: {
+        fontFamily: 'Poppins-Regular',
+        color: '#000',
     },
     cameraButton: {
         height: 200,

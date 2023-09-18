@@ -1,14 +1,40 @@
-import {Pressable, StyleSheet, Text, TextInput, View, Image, Button, SafeAreaView} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {Pressable, StyleSheet, Text, TextInput, View, Image, SafeAreaView} from 'react-native';
 import TopBar from '../components/TopBar.js';
 import BottomBar from '../components/BottomBar.js';
 import user from '../assets/user.png';
 import edit from '../assets/edit.png';
 import location from '../assets/location.png';
+import logout from '../assets/logout.png';
 import {useNavigation} from "@react-navigation/native";
-import { ScrollView } from 'react-native-gesture-handler';
+import { auth, signOut, onAuthStateChanged } from '../firebase';
 
 function AccountPage() {
     const navigation = useNavigation();
+    const [displayName, setDisplayName] = useState('Test');
+    const [email, setEmail] = useState('example@email.com');
+    const [phoneNumber, setPhoneNumber] = useState('9876543210');
+    const [city, setCity] = useState('Bhopal');
+    const [stateName, setStateName] = useState('Madhya Pradesh');
+  
+    useEffect(() => {
+      onAuthStateChanged(auth, (user) => {
+        if (user !== null) {
+          setDisplayName(user.displayName);
+          setEmail(user.email);
+        }
+      });
+    }, []);
+
+    const handleSignOut = async () => {
+        try {
+            await signOut(auth);
+            navigation.navigate('Login');
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    
     return (
         <SafeAreaView style={styles.mainContainer}>
         <TopBar />
@@ -20,15 +46,55 @@ function AccountPage() {
                         <Image style={styles.accountPicture} source={user}/>
                     </View>
                     <View style={styles.accountName}>
-                        <Text style={styles.userName}>Samarth Singh Bachhotiya</Text>
+                        <Text style={styles.userName}>{displayName}</Text>
                     </View>
                     <View style={styles.accountCity}>
                         <Image source={location} style={styles.locationIcon}/>
-                        <Text style={styles.locationName}>Bhopal, Madhya Pradesh</Text>
+                        <Text style={styles.locationName}>{city}, {stateName}</Text>
                     </View>
                     <Pressable style={styles.editInfo}>
                         <Text style={styles.editText}>Edit info</Text>
                         <Image style={styles.editIcon} source={edit}/>
+                    </Pressable>
+                    <Text style={styles.accountDetails}>Account details</Text>
+                    <View style={styles.infoList}>
+                        <View style={styles.infoItem}>
+                            <Text style={styles.infoTitle}>
+                                E-mail:
+                            </Text>
+                            <Text style={styles.infoContent}>
+                                {email}
+                            </Text>
+                        </View>
+                        <View style={styles.infoItem}>
+                            <Text style={styles.infoTitle}>
+                                Phone no:
+                            </Text>
+                            <Text style={styles.infoContent}>
+                                {phoneNumber}
+                            </Text>
+                        </View>
+                        <View style={styles.infoItem}>
+                            <Text style={styles.infoTitle}>
+                                City/Village:
+                            </Text>
+                            <Text style={styles.infoContent}>
+                                {city}
+                            </Text>
+                        </View>
+                        <View style={styles.infoItem}>
+                            <Text style={styles.infoTitle}>
+                                State/province:
+                            </Text>
+                            <Text style={styles.infoContent}>
+                                {stateName}
+                            </Text>
+                        </View>
+                    </View>
+                    
+                    <Pressable onPress={handleSignOut} style={[styles.editInfo, {borderColor: '#c00'}]}>
+                        <Text style={styles.editText}>Log out</Text>
+                        <Image style={styles.editIcon} source={logout}/>
                     </Pressable>
                 </View>
             </View>
@@ -61,7 +127,6 @@ const styles = StyleSheet.create({
         height: '60%',
         padding: 10,
         paddingLeft: 15,
-        flex: 1,
         alignItems: 'center',
         paddingTop: 20,
     },
@@ -88,8 +153,8 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     accountCity: {
-        flex: 1,
         flexDirection: 'row',
+        marginBottom: 22,
     },
     accountName: {
         marginTop: 10,
@@ -111,7 +176,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-Regular',
     },
     editInfo: {
-        flex: .5,
         flexDirection: 'row',
         alignItems: 'center',
         borderWidth: 2,
@@ -120,6 +184,7 @@ const styles = StyleSheet.create({
         padding: 8,
         paddingLeft: 12,
         paddingRight: 12,
+        marginBottom: 4,
     },
     editIcon: {
         height: 16,
@@ -128,7 +193,37 @@ const styles = StyleSheet.create({
     editText: {
         fontFamily: 'Poppins-Regular',
         marginRight: 8,
-    }
+    },
+    infoList: {
+        width: '80%',
+        marginTop: 12,
+        marginBottom: 20,
+    },
+    infoItem: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 50,
+        borderBottomWidth: .5,
+        borderBottomColor: '#ccc',
+    },
+    infoTitle: {
+        marginRight: 10,
+        fontFamily: 'Poppins-SemiBold',
+    },
+    infoContent: {
+        fontFamily: 'Poppins-Regular',
+    },
+    accountDetails: {
+        fontFamily: 'Poppins-Regular',
+        fontSize: 14,
+        marginTop: 20,
+        color: '#888',
+        borderBottomWidth: .8,
+        borderBottomColor: '#ddd',
+    },
+
 });
 
 export default AccountPage;

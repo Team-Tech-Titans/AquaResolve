@@ -15,22 +15,40 @@ export default function BottomBar({ navigation }) {
     setActiveOption(route.name);
   }, [route.name]);
 
+  const androidRipple = { color: 'rgba(0, 0, 0, 0.1)', borderless: false };
+
+
   return (
     <View style={styles.container}>
       <View style={styles.bottomContainer}>
-        <Pressable style={styles.optionContainer} onPress={() => navigation.navigate('Home')}>
+        <Pressable android_ripple={androidRipple} style={[styles.optionContainer, ({ pressed }) => [
+          styles.button,
+          {
+            backgroundColor: pressed ? 'lightgray' : 'blue',
+          },
+        ]]} onPress={() => navigation.navigate('Home')}>
           <View style={[styles.optionImageContainer, activeOption === 'Home' && styles.activeOptionImageContainer]}>
             <Image source={problem} />
           </View>
           <Text style={styles.optionText}>New Problem</Text>
         </Pressable>
-        <Pressable style={styles.optionContainer} onPress={() => navigation.navigate('History')}>
+        <Pressable android_ripple={androidRipple} style={[styles.optionContainer, ({ pressed }) => [
+          styles.button,
+          {
+            backgroundColor: pressed ? 'lightgray' : 'blue',
+          },
+        ]]} onPress={() => navigation.navigate('History')}>
           <View style={[styles.optionImageContainer, activeOption === 'History' && styles.activeOptionImageContainer]}>
             <Image source={history} />
           </View>
           <Text style={styles.optionText}>History</Text>
         </Pressable>
-        <Pressable style={styles.optionContainer} onPress={() => navigation.navigate('Account')}>
+        <Pressable android_ripple={androidRipple} style={[styles.optionContainer, ({ pressed }) => [
+          styles.button,
+          {
+            backgroundColor: pressed ? 'lightgray' : 'blue',
+          },
+        ]]} onPress={() => navigation.navigate('Account')}>
           <View style={[styles.optionImageContainer, activeOption === 'Account' && styles.activeOptionImageContainer]}>
             <Image source={account} />
           </View>
@@ -59,6 +77,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    height: '100%',
   },
   optionImageContainer: {
     height: 32,

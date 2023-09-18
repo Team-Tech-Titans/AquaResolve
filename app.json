@@ -4,11 +4,10 @@
     "slug": "AquaResolve",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/logoBig.png",
+    "icon": "./assets/appIcon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "image": "./assets/splashScreen.png",
       "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": [
@@ -20,9 +19,10 @@
     "android": {
       "package": "com.techtitans.aquaresolve",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logoBig.png",
+        "foregroundImage": "./assets/appIcon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": ["CAMERA_ROLL", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"]
     },
     "web": {
       "favicon": "./assets/logoSmall.png"
@@ -31,6 +31,9 @@
       "eas": {
         "projectId": "913557e9-0c9e-42f6-ba5b-8f48cc82571e"
       }
-    }
+    },
+    "permissions": {
+      "location": true
+    }    
   }
 }

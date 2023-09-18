@@ -1,4 +1,5 @@
-import React,{Component} from 'react';
+import React,{ useState, useEffect } from 'react';
+import { StatusBar } from 'expo-status-bar';
 import {
     StyleSheet,
     Text,
@@ -10,16 +11,52 @@ import {
 } from 'react-native';
 import googleIcon from '../assets/google.png';
 import icon from '../assets/logoSmall.png';
-
-
 import { SafeAreaView } from 'react-native-safe-area-context';
-import TopBar from '../components/TopBar.js';
-import BottomBar from '../components/BottomBar.js';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { auth, getAuth, signInWithEmailAndPassword, initializeApp, getReactNativePersistence, onAuthStateChanged } from '../firebase';
 
 export default function Login({navigation}){
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => {
+          if (user) {
+            navigation.navigate('Home');
+          }
+          else {
+            console.error("Logged out");
+          }
+        });
+      }, []);
+
+
+            
+    const signInUser = async (email, password) => {
+        try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        console.log('User authenticated:', user);
+        } catch (error) {
+        console.error('Authentication error:', error);
+        }
+    };
+
+    const handleSignIn = async () => {
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        await AsyncStorage.setItem('authToken', 'yourAuthTokenHere');
+        navigation.navigate('Home');
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+
     return(
         <SafeAreaView style={styles.container}>
+        <StatusBar hidden={false} />
         <View style={styles.heading}>
                 <View style={styles.logoContainer}>
                     <Image style={styles.logo} source={icon} />
@@ -31,12 +68,16 @@ export default function Login({navigation}){
             </Text>
             <TextInput
                 style={[{borderTopLeftRadius: 20, borderTopRightRadius: 20}, styles.input]}
-                placeholder='Enter your e-mail'>
+                placeholder='Enter your e-mail'
+                onChangeText={(text) => setEmail(text)}
+                value={email}>
             </TextInput>
 
             <TextInput
                 style={[{borderBottomLeftRadius: 20, borderBottomRightRadius: 20}, styles.input]}
                 placeholder='Enter your password'
+                onChangeText={(text) => setPassword(text)}
+                value={password}
                 secureTextEntry>
             </TextInput>
 
@@ -63,7 +104,7 @@ export default function Login({navigation}){
 
                 <TouchableOpacity
                     style={styles.userBtn}
-                    onPress={()=> navigation.navigate('Home')}
+                    onPress={handleSignIn}
                 >
                     <Text style={styles.btnText}>Log in</Text>
                 </TouchableOpacity>
@@ -110,7 +151,7 @@ const styles = StyleSheet.create({
     input:{
         width:'90%',
         backgroundColor:'white',
-        padding: 15,
+        padding: 13,
         fontFamily: 'Poppins-Regular',
         borderBottomWidth: 1,
         borderBottomColor: '#eee',
@@ -143,7 +184,6 @@ const styles = StyleSheet.create({
         marginTop: 16,
         marginBottom: 10,
         borderRadius: 50,
-        flex: .06,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',

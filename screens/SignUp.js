@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { StatusBar } from 'expo-status-bar';
 import {
     SafeAreaView,
     StyleSheet,
@@ -10,67 +11,79 @@ import {
     Image,
 } from 'react-native';
 import googleIcon from '../assets/google.png';
-import TopBar from '../components/TopBar.js';
 import icon from '../assets/logoSmall.png';
+import { auth, updateProfile, updatePhoneNumber, getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, initializeApp, getReactNativePersistence, onAuthStateChanged } from '../firebase';
+
+
 
 const SignupScreen = ({ navigation }) => {
-    const [firstName, setFirstname] = useState("");
-    const [lastName, setlastname] = useState("");
-    const [phoneNo, setPhoneNo] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmpass] = useState("");
+
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleSignUp = async () => {
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    
+            const user = userCredential.user;
+    
+            await updateProfile(user, {
+                displayName: name,
+                email: email,
+            });
+    
+            await updatePhoneNumber(user, phoneNumber);
+    
+            navigation.navigate('Login');
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return (
         <SafeAreaView style={styles.container}>
-            {/* <TopBar /> */}
+            <StatusBar hidden={false} />
             <View style={styles.heading}>
-                    <View style={styles.logoContainer}>
-                        <Image style={styles.logo} source={icon} />
-                    </View>
-                    <Text style={styles.headingTitle}>AquaResolve</Text>
+                <View style={styles.logoContainer}>
+                    <Image style={styles.logo} source={icon} />
+                </View>
+                <Text style={styles.headingTitle}>AquaResolve</Text>
             </View>
             <Text style={styles.subHeading}>
-                    Create an account to get started
+                Create an account to get started
             </Text>
             <TextInput
                 style={[{ borderTopLeftRadius: 20, borderTopRightRadius: 20 }, styles.input]}
                 placeholder='Enter your name'
-                value={firstName}
-                onChangeText={(text) => setFirstname(text)}>
+                onChangeText={(text) => setName(text)}
+                value={name}>
             </TextInput>
 
             <TextInput
                 style={styles.input}
                 placeholder='Enter your e-mail address'
-                inputMode='tel'
-                value={phoneNo}
-                maxLength={10}
-                onChangeText={(text) => setPhoneNo(text)}>
+                inputMode='email'
+                onChangeText={(text) => setEmail(text)}
+                value={email}>
             </TextInput>
 
             <TextInput
                 style={styles.input}
                 placeholder='Enter your mobile number'
                 inputMode='tel'
-                value={phoneNo}
                 maxLength={10}
-                onChangeText={(text) => setPhoneNo(text)}>
-            </TextInput>
-
-            <TextInput
-                style={styles.input}
-                placeholder='Create a password'
-                secureTextEntry={true}
-                value={password}
-                onChangeText={(text) => setPassword(text)}
-            >
+                onChangeText={(text) => setPhoneNumber(text)}
+                value={phoneNumber}>
             </TextInput>
 
             <TextInput
                 style={[{ borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }, styles.input]}
-                placeholder='Confirm Password'
-                secureTextEntry={true}
-                value={confirmPassword}
-                onChangeText={(text) => setConfirmpass(text)}>
+                placeholder='Create a password'
+                onChangeText={(text) => setPassword(text)}
+                value={password}
+                secureTextEntry>
             </TextInput>
 
             <Text style={styles.orText}>
@@ -94,7 +107,7 @@ const SignupScreen = ({ navigation }) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.userBtn}
-                    onPress={() => navigation.navigate('Home')}>
+                    onPress={handleSignUp}>
                     <Text style={styles.btnText}>Sign Up</Text>
                 </TouchableOpacity>
             </View>
@@ -131,7 +144,7 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         marginRight: 10,
     },
-    subHeading:{
+    subHeading: {
         fontSize: 15,
         textAlign: 'center',
         marginBottom: 24,
@@ -163,13 +176,12 @@ const styles = StyleSheet.create({
     },
     googleBtn: {
         backgroundColor: '#fff',
-        padding: 15,
+        padding: 12,
         paddingLeft: 20,
         paddingRight: 20,
         marginTop: 16,
         marginBottom: 10,
         borderRadius: 50,
-        flex: .1,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
@@ -198,3 +210,4 @@ const styles = StyleSheet.create({
     },
 })
 export default SignupScreen;
+
