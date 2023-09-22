@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import googleIcon from '../assets/google.png';
 import icon from '../assets/logoSmall.png';
-import { auth, updateProfile, updatePhoneNumber, getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, initializeApp, getReactNativePersistence, onAuthStateChanged } from '../firebase';
+import { standardUserAuth, updateProfile, updatePhoneNumber, getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, initializeApp, getReactNativePersistence, onAuthStateChanged } from '../firebase';
 
 
 
@@ -25,7 +25,7 @@ const SignupScreen = ({ navigation }) => {
 
     const handleSignUp = async () => {
         try {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const userCredential = await createUserWithEmailAndPassword(standardUserAuth, email, password);
     
             const user = userCredential.user;
     

@@ -6,9 +6,11 @@ import location from '../assets/location.png';
 import {useNavigation} from "@react-navigation/native";
 import { useEffect, useState } from 'react';
 import * as Location from 'expo-location';
-import { collection, addDoc, db, storage, ref, uploadBytes, auth, signOut, onAuthStateChanged } from '../firebase';
+import {  collection, addDoc, db, storage, uploadBytes, ref, standardUserAuth, getAuth, updateProfile, updatePhoneNumber, signInWithEmailAndPassword, initializeApp, getReactNativePersistence, onAuthStateChanged, createUserWithEmailAndPassword, signOut  } from '../firebase';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
+import Loading from '../components/Loading';
+
 
 
 
@@ -24,9 +26,12 @@ function HomePage() {
     const [selectedImage, setSelectedImage] = useState(null);
     const [imageUrl, setImageUrl] = useState('');
     const [description, setDescription] = useState('');
+    const [imageState, setImageState] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [responseState, setResponseState] = useState('');
     
     useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(standardUserAuth, (user) => {
           if (user !== null) {
             setDisplayName(user.displayName);
             setEmail(user.email);
@@ -36,98 +41,83 @@ function HomePage() {
       }, []);
 
 
-      const handleImageClick = () => {
-        alert("Image can't be uploaded for now, feature on the way!")
-      }
+      // const handleImageClick = () => {
+      //   alert("Image can't be uploaded for now, feature on the way!")
+      // }
 
 
-    //   const pickImage = async () => {
-    //     try {
-    //       const result = await ImagePicker.launchImageLibraryAsync({
-    //         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    //         allowsEditing: true,
-    //         quality: 1,
-    //         base64: true,
-    //       });
+      const pickImage = async () => {
+        try {
+          const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            quality: 1,
+            base64: true,
+          });
       
-    //       if (!result.canceled && result.assets.length > 0) {
-    //         const base64Data = await convertToBase64(result.assets[0].uri);
-    //         return base64Data;
-    //       } else {
-    //         console.warn('No image selected or image selection canceled');
-    //         return null;
-    //       }
-    //     } catch (error) {
-    //       console.error('Error picking an image:', error);
-    //       return null;
-    //     }
-    //   };
+          if (!result.canceled && result.assets.length > 0) {
+            const base64Data = await convertToBase64(result.assets[0].uri);
+            return base64Data;
+          } else {
+            console.warn('No image selected or image selection canceled');
+            return null;
+          }
+        } catch (error) {
+          console.error('Error picking an image:', error);
+          return null;
+        }
+      };
       
-    //   const convertToBase64 = async (imageUri) => {
-    //     try {
-    //       if (!imageUri) {
-    //         console.error('Invalid image URI');
-    //         throw new Error('Invalid image URI');
-    //       }
+      const convertToBase64 = async (imageUri) => {
+        try {
+          if (!imageUri) {
+            console.error('Invalid image URI');
+            throw new Error('Invalid image URI');
+          }
       
-    //       const base64Data = await FileSystem.readAsStringAsync(imageUri, {
-    //         encoding: FileSystem.EncodingType.Base64,
-    //       });
-    //       return base64Data;
-    //     } catch (error) {
-    //       console.error('Error converting to base64:', error);
-    //       throw error;
-    //     }
-    //   };
+          const base64Data = await FileSystem.readAsStringAsync(imageUri, {
+            encoding: FileSystem.EncodingType.Base64,
+          });
+          console.log(base64Data);
+          return base64Data;
+        } catch (error) {
+          console.error('Error converting to base64:', error);
+          throw error;
+        }
+      };
       
-    //   const handleImageClick = async () => {
-    //     try {
-    //       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    //       console.log('Media library permission status:', status);
+      const handleImageClick = async () => {
+        try {
+          const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+          console.log('Media library permission status:', status);
       
-    //       if (status !== 'granted') {
-    //         alert('Permission to access media library denied');
-    //       } else {
-    //         const imageBase64Data = await pickImage();
+          if (status !== 'granted') {
+            alert('Permission to access media library denied');
+          } else {
+            const imageBase64Data = await pickImage();
       
-    //         if (imageBase64Data) {
-    //           await uploadImage(imageBase64Data);
-    //         } else {
-    //           console.error('Image upload failed');
-    //           alert('Image upload failed. Please try again.');
-    //         }
-    //       }
-    //     } catch (error) {
-    //       console.error('Error handling image:', error);
-    //       alert('An error occurred while handling the image. Please try again.');
-    //     }
-    //   };
+            if (imageBase64Data) {
+              await uploadImage(imageBase64Data);
+            } else {
+              console.error('Image upload failed');
+              alert('Image upload failed. Please try again.');
+            }
+          }
+        } catch (error) {
+          console.error('Error handling image:', error);
+          alert('An error occurred while handling the image. Please try again.');
+        }
+      };
+      const uploadImage = async (imageBase64Data) => {
+        const base64Image = imageBase64Data;
+        setImageState(base64Image);
+      };
       
-    //   const uploadImage = async (imageBase64Data) => {
-    //     const base64Image = imageBase64Data;
-    //     console.log('Firebase storage object:', storage);
-    //     const storageRef = ref(storage, 'some-child.jpg');
       
-    //     try {
-    //       const uri = `data:image/jpeg;base64,${base64Image}`;
-    //       const fileUri = FileSystem.cacheDirectory + 'image.jpg';
-    
-    //       await FileSystem.writeAsStringAsync(fileUri, base64Image, {
-    //         encoding: FileSystem.EncodingType.Base64,
-    //       });
       
-    //       const blob = await FileSystem.getInfoAsync(fileUri);
       
-    //       await uploadBytes(storageRef, blob.uri);
-      
-    //       alert('Uploaded a blob or file!');
-    //     } catch (error) {
-    //       console.error('Error uploading image:', error);
-    //     }
-    //   };
-
     const submitData = async () => {
-        console.log("hi");
+      setIsLoading(true);
         try {
             const docRef = await addDoc(collection(db, "data"), {
               userName: displayName,
@@ -136,10 +126,14 @@ function HomePage() {
               location: locationDetails,
               problemDescription: description,
               coordinates: locationCoordinates,
+              image: imageState,
+              city: "Bhopal",
             });
+            setIsLoading(false);
             alert("Problem submitted succesfully")
           } catch (e) {
             console.error(e);
+            setIsLoading(false);
             alert("Error submitting problem");
           }
     }
@@ -147,13 +141,18 @@ function HomePage() {
 
 
     const getUserLocation = async () => {
-        try {
-          const location = await Location.getCurrentPositionAsync({});
-          setLocationCoordinates([location.coords.latitude, location.coords.longitude]);
-        } catch (error) {
-            setLocationCoordinates('Error getting location, tap to try again');
-        }
-      };
+      while (locationCoordinates.length === 0 || locationCoordinates.includes(undefined)) {
+          try {
+            setTimeout(async () => {
+              const location = await Location.getCurrentPositionAsync({});
+              console.log(locationCoordinates)
+            }, 500)
+            setLocationCoordinates([location.coords.latitude, location.coords.longitude]);
+          } catch (error) {
+              setLocationCoordinates('Error getting location, tap to try again');
+          }
+      }
+    };
 
     const getLocation = async () => {
         const { status } = await Location.requestForegroundPermissionsAsync();
@@ -169,25 +168,27 @@ function HomePage() {
       const getLocationDetails = async (latitude, longitude) => {
         setLocationDetails('Getting your location...');
         await getLocation();
-        try {
-          const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`
-          );
-      
-          if (response.ok) {
-            const locationData = await response.json();
-            console.log(locationData);
-            const displayName = locationData.display_name;
-            console.log(displayName)
-            setLocationDetails(displayName);
-          } else {
-            setLocationDetails('Error fetching location, tap to try again.');
-          }
-        } catch (error) {
-          console.error('Error fetching location details:', error);
-          setLocationDetails('Error fetching location, tap to try again.');
-        }
-      };
+            try {
+              const response = await fetch(
+                `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`
+              );
+              console.log("Response: ", response);
+              setResponseState(response);
+          
+              if (response.ok) {
+                const locationData = await response.json();
+                console.log(locationData);
+                const displayName = locationData.display_name;
+                console.log(displayName)
+                setLocationDetails(displayName);
+              } else {
+                setLocationDetails('hehe');
+              }
+            } catch (error) {
+              console.error('Error fetching location details:', error);
+              setLocationDetails('Error fetching location, tap to try again.');
+            }
+    }
   
     const handleLocationInputFocus = () => {
       setKeyboardOffset(-120);
@@ -201,6 +202,9 @@ function HomePage() {
         style={styles.mainContainer}>
             <TopBar />
             <ScrollView style={styles.container}>
+              {isLoading &&
+                <Loading  />
+              }
             <Text style={styles.greeting}>Hi {displayName}!</Text>
             <Text style={styles.problemContainerTitle}>Enter your problem details</Text>
             <View style={styles.problemContainer}>
@@ -267,6 +271,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-Regular',
         marginBottom: 4,
         paddingLeft: 30,
+        overflow: 'hidden',
     },
     textInput: {
         height: 100,

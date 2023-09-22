@@ -9,11 +9,11 @@ import {
     Pressable,
     Image,
 } from 'react-native';
-import googleIcon from '../assets/google.png';
-import icon from '../assets/logoSmall.png';
+import googleIcon from '../../assets/google.png';
+import icon from '../../assets/logoSmall.png';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { standardUserAuth, getAuth, signInWithEmailAndPassword, initializeApp, getReactNativePersistence, onAuthStateChanged } from '../firebase';
+import { adminUserAuth, getAuth, signInWithEmailAndPassword, initializeApp, getReactNativePersistence, onAuthStateChanged } from '../../firebase';
 
 export default function Login({navigation}){
 
@@ -21,9 +21,9 @@ export default function Login({navigation}){
     const [password, setPassword] = useState('');
 
     useEffect(() => {
-        onAuthStateChanged(standardUserAuth, (user) => {
+        onAuthStateChanged(adminUserAuth, (user) => {
           if (user) {
-            navigation.navigate('Home');
+            navigation.navigate('adminHome');
           }
         });
       }, []);
@@ -32,7 +32,7 @@ export default function Login({navigation}){
             
     const signInUser = async (email, password) => {
         try {
-        const userCredential = await signInWithEmailAndPassword(standardUserAuth, email, password);
+        const userCredential = await signInWithEmailAndPassword(adminUserAuth, email, password);
         const user = userCredential.user;
         console.log('User authenticated:', user);
         } catch (error) {
@@ -42,9 +42,9 @@ export default function Login({navigation}){
 
     const handleSignIn = async () => {
       try {
-        await signInWithEmailAndPassword(standardUserAuth, email, password);
+        await signInWithEmailAndPassword(adminUserAuth, email, password);
         await AsyncStorage.setItem('authToken', 'yourAuthTokenHere');
-        navigation.navigate('Home');
+        navigation.navigate('adminHome');
       } catch (error) {
         console.error(error);
       }
@@ -55,10 +55,10 @@ export default function Login({navigation}){
         <SafeAreaView style={styles.container}>
         <StatusBar hidden={false} />
         <View style={styles.userCapsule}>
-            <Pressable style={styles.userButton}>
+            <Pressable onPress={() => navigation.navigate('Login')} style={styles.userButton}>
                 <Text style={styles.standardText}>Standard</Text>
             </Pressable>
-            <Pressable onPress={() => navigation.navigate('adminLogin')} style={styles.adminButton}>
+            <Pressable style={styles.adminButton}>
                 <Text style={styles.adminText}>Admin</Text>
             </Pressable>
         </View>
@@ -66,7 +66,7 @@ export default function Login({navigation}){
                 <View style={styles.logoContainer}>
                     <Image style={styles.logo} source={icon} />
                 </View>
-                <Text style={styles.headingTitle}>AquaResolve</Text>
+                <Text style={styles.headingTitle}>AquaResolve Admin</Text>
         </View>
             <Text style={styles.subHeading}>
                     Enter your credentials to get back in
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
         flex:1,
         justifyContent:'center',
         alignItems:'center',
-        backgroundColor:'#A9D6E5',
+        backgroundColor:'#e5e4a9',
     },
     userCapsule: {
         height: 40,
@@ -134,10 +134,9 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         marginBottom: 32,
         borderWidth: 1,
-        borderColor: '#012A4A',
+        borderColor: '#76520e',
     },
     userButton: {
-        backgroundColor: '#2A6F97',
         height: '100%',
         width: '50%',
         justifyContent: 'center',
@@ -146,13 +145,14 @@ const styles = StyleSheet.create({
         borderRadius: 100,
     },
     standardText: {
-        color: '#fff',
         fontFamily: 'Poppins-Regular',
     },
     adminText: {
+        color: '#fff',
         fontFamily: 'Poppins-Regular',
     },
     adminButton: {
+        backgroundColor: '#76520e',
         height: '100%',
         width: '50%',
         justifyContent: 'center',
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
         marginTop:15,
     },
     userBtn:{
-        backgroundColor: '#2C7DA0',
+        backgroundColor: '#76520e',
         padding: 15,
         width: '45%',
         marginTop: 15,

@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import {Pressable, StyleSheet, Text, TextInput, View, Image, SafeAreaView} from 'react-native';
 import TopBar from '../components/TopBar.js';
 import BottomBar from '../components/BottomBar.js';
-import user from '../assets/user.png';
-import edit from '../assets/edit.png';
-import location from '../assets/location.png';
-import logout from '../assets/logout.png';
+import user from '../../assets/user.png';
+import edit from '../../assets/edit.png';
+import location from '../../assets/location.png';
+import logout from '../../assets/logout.png';
 import {useNavigation} from "@react-navigation/native";
-import { standardUserAuth, signOut, onAuthStateChanged } from '../firebase';
+import { adminUserAuth, signOut, onAuthStateChanged } from '../../firebase';
 
 function AccountPage() {
     const navigation = useNavigation();
@@ -18,7 +18,7 @@ function AccountPage() {
     const [stateName, setStateName] = useState('Madhya Pradesh');
   
     useEffect(() => {
-      onAuthStateChanged(standardUserAuth, (user) => {
+      onAuthStateChanged(adminUserAuth, (user) => {
         if (user !== null) {
           setDisplayName(user.displayName);
           setEmail(user.email);
@@ -28,7 +28,7 @@ function AccountPage() {
 
     const handleSignOut = async () => {
         try {
-            await signOut(standardUserAuth);
+            await signOut(adminUserAuth);
             navigation.navigate('Login');
         } catch (error) {
             console.error(error);
